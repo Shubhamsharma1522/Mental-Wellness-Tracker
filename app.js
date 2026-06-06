@@ -104,6 +104,35 @@ function escapeHTML(str) {
     });
 }
 
+// Displays non-blocking glassmorphic notification toast
+function showToast(message, type = 'info') {
+    let container = document.getElementById('toast-container');
+    if (!container) {
+        container = document.createElement('div');
+        container.id = 'toast-container';
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+    }
+    
+    const toast = document.createElement('div');
+    toast.className = `toast toast-${type}`;
+    toast.textContent = message;
+    container.appendChild(toast);
+    
+    // Force reflow
+    toast.offsetHeight;
+    
+    toast.classList.add('show');
+    
+    // Auto-remove after 4 seconds
+    setTimeout(() => {
+        toast.classList.remove('show');
+        toast.addEventListener('transitionend', () => {
+            toast.remove();
+        });
+    }, 4000);
+}
+
 // Convert mood label to numerical score for trending visualization
 function getMoodScore(mood) {
     const scores = {
@@ -207,13 +236,13 @@ function setupCheckinForm() {
 
         // 1. Validation
         if (!state.selectedMood) {
-            alert('Please select how you are feeling right now.');
+            showToast('Please select how you are feeling right now.', 'warning');
             return;
         }
 
         const reflectionText = document.getElementById('input-reflection').value.trim();
         if (!reflectionText) {
-            alert('Please share a brief reflection or description of your thoughts.');
+            showToast('Please share a brief reflection or description of your thoughts.', 'warning');
             return;
         }
 
@@ -266,7 +295,7 @@ function setupCheckinForm() {
 
         } catch (error) {
             console.error('Check-in processing error:', error);
-            alert('Unable to secure connection to wellness AI server. Falling back to local mindfulness generation.');
+            showToast('Using local wellness plan fallback.', 'info');
             
             // Fail-safe fallback mode
             const localPlan = generateLocalWellnessPlan(checkinData);
@@ -766,7 +795,7 @@ function setupAudioPlayer() {
                 })
                 .catch(err => {
                     console.error('Audio load failure:', err);
-                    alert('Audio playback failed. Please check your network or try again.');
+                    showToast('Audio playback failed. Please check your network.', 'error');
                 });
         });
     });
@@ -834,11 +863,11 @@ function setupPomodoroTimer() {
         state.pomodoro.isActive = false;
         
         if (state.pomodoro.mode === 'work') {
-            alert('Study Pomodoro finished! Take a 5-minute restorative break.');
+            showToast('Study Pomodoro finished! Take a 5-minute restorative break.', 'success');
             state.pomodoro.mode = 'break';
             state.pomodoro.secondsRemaining = 5 * 60; // 5 mins
         } else {
-            alert('Break finished! Ready to lock back into study focus?');
+            showToast('Break finished! Ready to lock back into study focus?', 'success');
             state.pomodoro.mode = 'work';
             state.pomodoro.secondsRemaining = 25 * 60;
         }
