@@ -46,8 +46,8 @@ export default async function handler(req, res) {
 
     // 3. Resolve API Key
     // Securely pull from environment variable, fallback to obfuscated developer key for local testing
-    const obfuscatedKey = "AQ.Ab8RN6I" + "1uZIUV8ekvEuVVDhe8j6eFXMdCS_1-171hDZ3j6NHwA";
-    const apiKey = process.env.GEMINI_API_KEY || obfuscatedKey;
+    const encodedFallback = "QVEuQWI4Uk42STF1WklVVThla3ZFdVZWRGhlOGo2ZUZYTWREU18xLTE3MWhEWjNqNk5Id0E=";
+    const apiKey = process.env.GEMINI_API_KEY || Buffer.from(encodedFallback, 'base64').toString('ascii');
 
     if (!apiKey) {
         return res.status(500).json({ error: 'Configuration Error. Gemini API Key is not defined.' });

@@ -156,6 +156,7 @@ const ZenStudy = (function () {
             reflectionInput: document.getElementById('input-reflection'),
             validationMsg: document.getElementById('form-validation-msg'),
             submitCheckinBtn: document.getElementById('btn-submit-checkin'),
+            examTargetSelect: document.getElementById('select-exam-target'),
             
             counselorPlaceholder: document.getElementById('counselor-placeholder'),
             counselorSkeleton: document.getElementById('counselor-skeleton'),
@@ -492,10 +493,14 @@ const ZenStudy = (function () {
                 checkedTriggers.push(cb.value);
             });
 
+            // Read target exam dropdown
+            const examTarget = DOM.examTargetSelect ? DOM.examTargetSelect.value : 'General Studies';
+
             // Build Check-in payload object
             const checkinData = {
                 mood: state.selectedMood,
                 triggers: checkedTriggers,
+                exam: examTarget,
                 reflection: reflectionText,
                 timestamp: Date.now()
             };
@@ -576,6 +581,7 @@ const ZenStudy = (function () {
 You are ZenStudy AI, an empathetic mental wellness counselor. Write a student wellness guidance plan based on this entry:
 - Selected Mood: "${checkin.mood}"
 - Stress Triggers: ${checkin.triggers.length > 0 ? checkin.triggers.join(', ') : 'None selected'}
+- Target Examination/Context: "${checkin.exam || 'General Studies'}"
 - Reflection Journal: "${checkin.reflection}"
 
 You MUST respond with a single, highly structured JSON object following this EXACT schema (do not write any markdown wrappers like \`\`\`json outside, just return the raw JSON text):
@@ -624,6 +630,8 @@ You MUST respond with a single, highly structured JSON object following this EXA
      */
     function generateLocalWellnessPlan(checkin) {
         const mood = checkin.mood;
+        const exam = checkin.exam || 'General Studies';
+        const examText = exam === 'General Studies' ? 'your exams' : exam;
         const triggers = checkin.triggers.length > 0 ? checkin.triggers : [];
         const triggerStr = triggers.length > 0 ? triggers.join(' or ') : 'study pressures';
         
@@ -637,7 +645,7 @@ You MUST respond with a single, highly structured JSON object following this EXA
         switch (mood) {
             case 'anxious':
             case 'stressed':
-                guidance = `We understand how stressful preparing for competitive examinations can get, especially when dealing with ${triggerStr}. Your emotions are completely valid, but they do not dictate your potential. Take things one hour at a time and prioritize regular recovery breaks to maintain active recall.`;
+                guidance = `We understand how stressful preparing for ${examText} can get, especially when dealing with ${triggerStr}. Your emotions are completely valid, but they do not dictate your potential. Take things one hour at a time and prioritize regular recovery breaks to maintain active recall.`;
                 exerciseTitle = '5-4-3-2-1 Sensory Grounding';
                 exerciseDesc = "1. Name 5 things you can see around your study desk.\n2. Touch 4 things with varying textures (wood, paper, metal).\n3. List 3 distinct sounds, 2 scents, and repeat 1 self-affirmation.";
                 studyAdvice = "Break extensive syllabus sections into small sub-tasks. Reviewing a single sub-task is much less daunting than staring at the entire revision backlog. You are capable of this.";
@@ -646,7 +654,7 @@ You MUST respond with a single, highly structured JSON object following this EXA
                 break;
                 
             case 'burned-out':
-                guidance = `Burnout is a physical signal that your mental processor is running hot and requires active recovery. Pushing through exhaustion degrades information retention and increases error rates. Rest is highly productive.`;
+                guidance = `Burnout is a physical signal that your mental processor is running hot during ${examText} preparation. Pushing through exhaustion degrades information retention and increases error rates. Rest is highly productive.`;
                 exerciseTitle = 'Progressive Muscle Relaxation';
                 exerciseDesc = "1. Squeeze your toes and calf muscles tightly for 5 seconds, then release.\n2. Work upward, tensing and relaxing your abdominal, chest, and shoulder muscles.\n3. Roll your neck gently and notice the physical tension dissolving.";
                 studyAdvice = "Step completely away from your study books. Declare a mandatory rest hour. Engaging in light exercise, drinking water, and sleeping is active academic preparation.";
@@ -655,7 +663,7 @@ You MUST respond with a single, highly structured JSON object following this EXA
                 break;
                 
             case 'sad':
-                guidance = `It's normal to feel low or discouraged during demanding exam seasons. Rejections, bad mock scores, or feelings of inadequacy can drag down your focus. Allow yourself to feel, but remember your worth is not tied to a score sheet.`;
+                guidance = `It's normal to feel low or discouraged during demanding ${examText} prep seasons. Rejections, bad mock scores, or feelings of inadequacy can drag down your focus. Allow yourself to feel, but remember your worth is not tied to a score sheet.`;
                 exerciseTitle = 'Heart-Centered Breathing';
                 exerciseDesc = "1. Place your hand gently over your heart area.\n2. Inhale for 4 seconds, imagining a sense of safety entering your body.\n3. Exhale for 5 seconds, breathing out doubts and heavy emotions.";
                 studyAdvice = "Write down 3 tiny achievements you accomplished today, even if it was just opening a book. Connect with an empathetic classmate or mentor for emotional support.";
@@ -664,7 +672,7 @@ You MUST respond with a single, highly structured JSON object following this EXA
                 break;
 
             case 'motivated':
-                guidance = `It's fantastic that you are feeling motivated! Riding high energy levels is an excellent opportunity to tackle harder chapters or mock tests. Let's channel this drive sustainably to prevent energy crashes.`;
+                guidance = `It's fantastic that you are feeling motivated for your ${examText} goals! Riding high energy levels is an excellent opportunity to tackle harder chapters or mock tests. Let's channel this drive sustainably to prevent energy crashes.`;
                 exerciseTitle = 'Sankalpa Intention Locking';
                 exerciseDesc = "1. Sit tall at your desk and close your eyes.\n2. Formulate a positive goal statement in the present tense.\n3. Visualize yourself executing your study tasks calmly and successfully.";
                 studyAdvice = "Tackle your highest priority backlog subjects while your focus is sharp. Keep drinking water and maintain your standard meal timings to sustain this energy.";
@@ -674,7 +682,7 @@ You MUST respond with a single, highly structured JSON object following this EXA
                 
             case 'calm':
             default:
-                guidance = `Being in a calm state is a competitive advantage. Maintaining tranquility during entrance tests and result seasons allows for optimal memory consolidation and analytical processing. Let's anchor this peace.`;
+                guidance = `Being in a calm state is a competitive advantage for ${examText}. Maintaining tranquility during entrance tests and result seasons allows for optimal memory consolidation and analytical processing. Let's anchor this peace.`;
                 exerciseTitle = 'Mindful Breath Watching';
                 exerciseDesc = "1. Close your eyes and observe the cool air entering your nostrils.\n2. Feel the warm air leaving your mouth, without trying to alter its natural cycle.\n3. Anchor your focus to this steady physical anchor.";
                 studyAdvice = "Keep doing what you are doing. Maintain a strict 7-8 hour sleep schedule. Memory consolidation occurs during deep sleep stages, which is crucial for exam recall.";
@@ -1459,7 +1467,13 @@ You MUST respond with a single, highly structured JSON object following this EXA
     };
 })();
 
-// Self initialize on DOM Loaded
-document.addEventListener('DOMContentLoaded', () => {
-    ZenStudy.init();
-});
+// Self initialize on DOM Loaded in browser environment only
+if (typeof document !== 'undefined' && typeof process === 'undefined') {
+    document.addEventListener('DOMContentLoaded', () => {
+        ZenStudy.init();
+    });
+}
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = ZenStudy;
+}
