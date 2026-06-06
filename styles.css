@@ -195,10 +195,11 @@ input:focus-visible {
 }
 
 /* Fieldset reset — remove default browser fieldset border/padding */
-.fieldset-reset {
-    border: none;
-    padding: 0;
-    margin: 0;
+fieldset.fieldset-reset {
+    border: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-width: 0 !important;
 }
 
 /* ==========================================================================
