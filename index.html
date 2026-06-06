@@ -23,7 +23,7 @@
     <header class="app-header">
         <div class="header-container">
             <div class="logo-area">
-                <span class="material-icons-round logo-icon">self_improvement</span>
+                <span class="material-icons-round logo-icon animate-spin-slow">self_improvement</span>
                 <div class="logo-text">
                     <h1 id="app-title">ZenStudy <span class="accent-text">AI</span></h1>
                     <p class="tagline">Calm Minds, Better Scores</p>
@@ -137,19 +137,19 @@
         <section class="results-section">
             <!-- Tabs Navigation -->
             <div class="results-tabs glass">
-                <button id="tab-btn-counselor" class="tab-btn active" data-tab="tab-counselor" aria-label="Open ZenBot Counsel Panel">
+                <button id="tab-btn-counselor" class="tab-btn active" data-tab="tab-counselor" aria-label="Open ZenBot Counsel Panel" aria-selected="true">
                     <span class="material-icons-round tab-icon">psychology</span>
                     <span>ZenBot Counselor</span>
                 </button>
-                <button id="tab-btn-breathing" class="tab-btn" data-tab="tab-breathing" aria-label="Open Breathing Pacer Panel">
+                <button id="tab-btn-breathing" class="tab-btn" data-tab="tab-breathing" aria-label="Open Breathing Pacer Panel" aria-selected="false">
                     <span class="material-icons-round tab-icon">air</span>
                     <span>Breathing Guide</span>
                 </button>
-                <button id="tab-btn-analytics" class="tab-btn" data-tab="tab-analytics" aria-label="Open Mood Analytics Panel">
+                <button id="tab-btn-analytics" class="tab-btn" data-tab="tab-analytics" aria-label="Open Mood Analytics Panel" aria-selected="false">
                     <span class="material-icons-round tab-icon">analytics</span>
                     <span>Mind Trends</span>
                 </button>
-                <button id="tab-btn-resources" class="tab-btn" data-tab="tab-resources" aria-label="Open Relax Resources Panel">
+                <button id="tab-btn-resources" class="tab-btn" data-tab="tab-resources" aria-label="Open Relax Resources Panel" aria-selected="false">
                     <span class="material-icons-round tab-icon">library_books</span>
                     <span>Calm Desk</span>
                 </button>
@@ -197,7 +197,7 @@
                                     <h4>Recommended Mindfulness Exercise</h4>
                                 </div>
                                 <h5 id="coping-exercise-title" class="sub-title">---</h5>
-                                <p id="coping-exercise-desc" class="counsel-text">---</p>
+                                <div id="coping-exercise-desc" class="counsel-text">---</div>
                                 <button id="btn-counsel-action" class="btn btn-secondary btn-sm" style="margin-top: 12px;">Try Grounding Now</button>
                             </div>
 
@@ -256,6 +256,8 @@
                         <div class="pacer-prompt" id="pacer-prompt-display">Get Ready</div>
                         
                         <div class="breathing-sphere-outer">
+                            <div class="breathing-sphere-ring ring-1"></div>
+                            <div class="breathing-sphere-ring ring-2"></div>
                             <div class="breathing-sphere-glow" id="breathing-sphere-glow-el"></div>
                             <div class="breathing-sphere" id="breathing-sphere-el"></div>
                             <div class="pacer-timer" id="pacer-timer-display">0</div>
@@ -355,7 +357,14 @@
                         </div>
                         <p class="resource-desc">Use Pomodoro pacing (25m Study, 5m Rest) to avoid mental exhaustion and study burnouts.</p>
                         
-                        <div class="pomodoro-timer-display" id="pomo-timer-display">25:00</div>
+                        <div class="pomodoro-timer-container">
+                            <svg class="pomo-progress-svg" viewBox="0 0 160 160">
+                                <circle class="pomo-bg-ring" cx="80" cy="80" r="70"></circle>
+                                <circle class="pomo-progress-ring" id="pomo-progress-ring-el" cx="80" cy="80" r="70"></circle>
+                            </svg>
+                            <div class="pomodoro-timer-display" id="pomo-timer-display">25:00</div>
+                        </div>
+
                         <div class="pomodoro-timer-controls">
                             <button id="btn-pomo-start" class="btn btn-secondary btn-sm">Start Focus</button>
                             <button id="btn-pomo-reset" class="icon-btn-text" aria-label="Reset Pomodoro Timer"><span class="material-icons-round">replay</span></button>

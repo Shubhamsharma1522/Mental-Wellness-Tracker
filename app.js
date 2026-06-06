@@ -542,13 +542,23 @@ function renderMoodTrendsChart() {
         points.push({ x, y, log });
     });
 
-    // 4. Draw connecting line
+    // 4. Draw smooth connecting line (Cubic Bezier curves)
     if (points.length > 0) {
-        let d = `M ${points[0].x} ${points[0].y}`;
-        for (let i = 1; i < points.length; i++) {
-            d += ` L ${points[i].x} ${points[i].y}`;
+        if (points.length === 1) {
+            path.setAttribute('d', `M ${points[0].x} ${points[0].y}`);
+        } else {
+            let d = `M ${points[0].x} ${points[0].y}`;
+            for (let i = 0; i < points.length - 1; i++) {
+                const p0 = points[i];
+                const p1 = points[i + 1];
+                const cpX1 = p0.x + (p1.x - p0.x) / 3;
+                const cpY1 = p0.y;
+                const cpX2 = p0.x + 2 * (p1.x - p0.x) / 3;
+                const cpY2 = p1.y;
+                d += ` C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${p1.x} ${p1.y}`;
+            }
+            path.setAttribute('d', d);
         }
-        path.setAttribute('d', d);
     }
 
     // 5. Draw data points and x-axis date labels
@@ -857,6 +867,21 @@ function setupPomodoroTimer() {
         const mins = Math.floor(state.pomodoro.secondsRemaining / 60);
         const secs = state.pomodoro.secondsRemaining % 60;
         pomoDisplay.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        // Update circular progress SVG stroke offset
+        const ring = document.getElementById('pomo-progress-ring-el');
+        if (ring) {
+            const total = state.pomodoro.mode === 'work' ? 25 * 60 : 5 * 60;
+            const percentage = state.pomodoro.secondsRemaining / total;
+            const offset = 440 - (percentage * 440);
+            ring.style.strokeDashoffset = offset;
+            
+            if (state.pomodoro.mode === 'work') {
+                ring.style.stroke = 'var(--primary-light)';
+            } else {
+                ring.style.stroke = 'var(--accent-color)';
+            }
+        }
     }
 
     function triggerPomoCompletionAlert() {
