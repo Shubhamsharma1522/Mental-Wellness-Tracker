@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ZenStudy AI - A student mental wellness tracker to monitor mood, identify academic stress triggers, reflect on emotions, and receive personalized AI wellness support during board exams and competitive tests.">
+    <title>ZenStudy AI | Student Mental Wellness Tracker</title>
+    <!-- Google Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Decorative Ambient Glow Orbs -->
+    <div class="glow-orb orb-teal"></div>
+    <div class="glow-orb orb-emerald"></div>
+    <div class="glow-orb orb-indigo"></div>
+
+    <!-- Navigation Header -->
+    <header class="app-header">
+        <div class="header-container">
+            <div class="logo-area">
+                <span class="material-icons-round logo-icon">self_improvement</span>
+                <div class="logo-text">
+                    <h1 id="app-title">ZenStudy <span class="accent-text">AI</span></h1>
+                    <p class="tagline">Calm Minds, Better Scores</p>
+                </div>
+            </div>
+            <div class="action-area">
+                <button id="btn-toggle-theme" class="icon-btn" title="Toggle Theme" aria-label="Toggle light and dark theme">
+                    <span class="material-icons-round">dark_mode</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Grid Layout -->
+    <main class="app-container">
+        <!-- Sidebar: Daily Check-in Form -->
+        <section class="checkin-section card glass">
+            <h2 class="section-title">
+                <span class="material-icons-round title-icon">edit_note</span>
+                Daily Check-in
+            </h2>
+            <form id="wellness-checkin-form" class="checkin-form">
+                <!-- Mood Grid Selector -->
+                <div class="form-group">
+                    <label class="form-label" id="mood-grid-label">How are you feeling right now?</label>
+                    <div class="mood-grid" role="radiogroup" aria-labelledby="mood-grid-label" id="mood-radiogroup">
+                        <button type="button" class="mood-btn" data-mood="calm" role="radio" aria-checked="false" aria-label="Calm">
+                            <span class="mood-emoji">😌</span>
+                            <span class="mood-name">Calm</span>
+                        </button>
+                        <button type="button" class="mood-btn" data-mood="motivated" role="radio" aria-checked="false" aria-label="Motivated">
+                            <span class="mood-emoji">💪</span>
+                            <span class="mood-name">Motivated</span>
+                        </button>
+                        <button type="button" class="mood-btn" data-mood="anxious" role="radio" aria-checked="false" aria-label="Anxious">
+                            <span class="mood-emoji">😰</span>
+                            <span class="mood-name">Anxious</span>
+                        </button>
+                        <button type="button" class="mood-btn" data-mood="burned-out" role="radio" aria-checked="false" aria-label="Burned Out">
+                            <span class="mood-emoji">🥵</span>
+                            <span class="mood-name">Burned Out</span>
+                        </button>
+                        <button type="button" class="mood-btn" data-mood="sad" role="radio" aria-checked="false" aria-label="Sad">
+                            <span class="mood-emoji">😔</span>
+                            <span class="mood-name">Sad</span>
+                        </button>
+                        <button type="button" class="mood-btn" data-mood="stressed" role="radio" aria-checked="false" aria-label="Stressed">
+                            <span class="mood-emoji">🤯</span>
+                            <span class="mood-name">Stressed</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Academic Stress Triggers -->
+                <div class="form-group">
+                    <label class="form-label">Identify Stress Triggers (Select all that apply)</label>
+                    <div class="checkbox-grid" id="trigger-group">
+                        <label class="checkbox-label" for="tr-mock">
+                            <input type="checkbox" id="tr-mock" value="Mock Test Scores">
+                            <span class="checkbox-custom"></span>
+                            <span>Mock Tests</span>
+                        </label>
+                        <label class="checkbox-label" for="tr-backlog">
+                            <input type="checkbox" id="tr-backlog" value="Syllabus Backlog">
+                            <span class="checkbox-custom"></span>
+                            <span>Syllabus Backlog</span>
+                        </label>
+                        <label class="checkbox-label" for="tr-peer">
+                            <input type="checkbox" id="tr-peer" value="Peer Competition">
+                            <span class="checkbox-custom"></span>
+                            <span>Peer Pressure</span>
+                        </label>
+                        <label class="checkbox-label" for="tr-exams">
+                            <input type="checkbox" id="tr-exams" value="Exam Anxiety">
+                            <span class="checkbox-custom"></span>
+                            <span>Exam Anxiety</span>
+                        </label>
+                        <label class="checkbox-label" for="tr-sleep">
+                            <input type="checkbox" id="tr-sleep" value="Sleep Deprivation">
+                            <span class="checkbox-custom"></span>
+                            <span>Sleep Deprivation</span>
+                        </label>
+                        <label class="checkbox-label" for="tr-family">
+                            <input type="checkbox" id="tr-family" value="Family Expectations">
+                            <span class="checkbox-custom"></span>
+                            <span>Family Pressure</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Journaling reflection -->
+                <div class="form-group">
+                    <label for="input-reflection" class="form-label">
+                        <span>Reflection Diary</span>
+                        <span class="tooltip" title="Write whatever is in your mind—anxieties, goals, syllabus progress, or general feelings. The AI will analyze this for support.">
+                            <span class="material-icons-round">help_outline</span>
+                        </span>
+                    </label>
+                    <textarea id="input-reflection" class="form-input text-area" placeholder="E.g., 'UPSC prep is getting stressful. Scoring low on current affairs tests. Worried I won't finish revision in time...'" required></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="btn-submit-checkin" class="btn btn-primary btn-block">
+                    <span class="material-icons-round btn-icon">auto_awesome</span>
+                    <span>Submit Mood Check-in</span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Right Panel: Interactive Tabs -->
+        <section class="results-section">
+            <!-- Tabs Navigation -->
+            <div class="results-tabs glass">
+                <button id="tab-btn-counselor" class="tab-btn active" data-tab="tab-counselor" aria-label="Open ZenBot Counsel Panel">
+                    <span class="material-icons-round tab-icon">psychology</span>
+                    <span>ZenBot Counselor</span>
+                </button>
+                <button id="tab-btn-breathing" class="tab-btn" data-tab="tab-breathing" aria-label="Open Breathing Pacer Panel">
+                    <span class="material-icons-round tab-icon">air</span>
+                    <span>Breathing Guide</span>
+                </button>
+                <button id="tab-btn-analytics" class="tab-btn" data-tab="tab-analytics" aria-label="Open Mood Analytics Panel">
+                    <span class="material-icons-round tab-icon">analytics</span>
+                    <span>Mind Trends</span>
+                </button>
+                <button id="tab-btn-resources" class="tab-btn" data-tab="tab-resources" aria-label="Open Relax Resources Panel">
+                    <span class="material-icons-round tab-icon">library_books</span>
+                    <span>Calm Desk</span>
+                </button>
+            </div>
+
+            <!-- Tab: ZenBot Counselor -->
+            <div id="tab-counselor" class="tab-content active-content">
+                <!-- Skeletons Loader -->
+                <div id="counselor-skeleton" class="card glass skeleton-card hidden">
+                    <div class="skeleton-header">
+                        <div class="skeleton-title skeleton-anim"></div>
+                        <div class="skeleton-subtitle skeleton-anim" style="width: 280px"></div>
+                    </div>
+                    <div class="skeleton-body">
+                        <div class="skeleton-line skeleton-anim" style="width: 85%"></div>
+                        <div class="skeleton-line skeleton-anim" style="width: 70%"></div>
+                        <div class="skeleton-line skeleton-anim" style="width: 90%"></div>
+                    </div>
+                </div>
+
+                <!-- Content Area -->
+                <div id="counselor-placeholder" class="card glass placeholder-card">
+                    <span class="material-icons-round placeholder-icon animate-pulse">chat</span>
+                    <h3>Empathetic Support Workspace</h3>
+                    <p>Complete your daily wellness check-in on the left. ZenBot will analyze your mood, stress triggers, and reflection text to generate personalized coping strategies, study health advice, and grounding exercises.</p>
+                </div>
+
+                <div id="counselor-content" class="hidden">
+                    <div class="counselor-layout-grid">
+                        <!-- Primary AI Response Card -->
+                        <div class="counsel-card main-response-card glass">
+                            <div class="response-header">
+                                <span class="material-icons-round ai-indicator-icon">spa</span>
+                                <h4>Personalized Guidance</h4>
+                            </div>
+                            <p id="counselor-response-text" class="counsel-text">---</p>
+                        </div>
+
+                        <!-- Coping & Exercises Column -->
+                        <div class="counsel-sub-grid">
+                            <!-- Coping Strategy -->
+                            <div class="counsel-card coping-card glass">
+                                <div class="response-header">
+                                    <span class="material-icons-round coping-indicator-icon accent-emerald">therapeutic</span>
+                                    <h4>Recommended Mindfulness Exercise</h4>
+                                </div>
+                                <h5 id="coping-exercise-title" class="sub-title">---</h5>
+                                <p id="coping-exercise-desc" class="counsel-text">---</p>
+                                <button id="btn-counsel-action" class="btn btn-secondary btn-sm" style="margin-top: 12px;">Try Grounding Now</button>
+                            </div>
+
+                            <!-- Study / Academic Balance Tip -->
+                            <div class="counsel-card study-tip-card glass">
+                                <div class="response-header">
+                                    <span class="material-icons-round coping-indicator-icon accent-indigo">menu_book</span>
+                                    <h4>Study Health Advice</h4>
+                                </div>
+                                <p id="study-tip-desc" class="counsel-text">---</p>
+                            </div>
+
+                            <!-- Calming Quote -->
+                            <div class="counsel-card quote-card glass">
+                                <div class="response-header">
+                                    <span class="material-icons-round coping-indicator-icon accent-gold">format_quote</span>
+                                    <h4>Daily Encouragement</h4>
+                                </div>
+                                <blockquote id="wellness-quote-text" class="quote-text">---</blockquote>
+                                <cite id="wellness-quote-author" class="quote-author">---</cite>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Breathing Guide -->
+            <div id="tab-breathing" class="tab-content">
+                <div class="breathing-layout">
+                    <!-- Control Settings Panel -->
+                    <div class="breathing-sidebar glass card">
+                        <h3>Stress Reliever Pacer</h3>
+                        <p class="panel-subtitle">Select a breathing pattern to lower your heart rate and ease academic anxiety.</p>
+                        
+                        <div class="form-group" style="margin-top: 20px;">
+                            <label for="select-breath-pattern" class="form-label">Pattern Preset</label>
+                            <select id="select-breath-pattern" class="form-input">
+                                <option value="box" selected>Box Breathing (4s In - 4s Hold - 4s Out - 4s Hold)</option>
+                                <option value="relax">4-7-8 Breathing (4s In - 7s Hold - 8s Out)</option>
+                                <option value="calm">Calm Breathing (4s In - 2s Hold - 4s Out)</option>
+                            </select>
+                            <small id="breath-preset-desc" class="form-help">Box Breathing is used by Navy SEALs to achieve calm focus during high stress. Excellent before exams.</small>
+                        </div>
+
+                        <!-- Breathing controls -->
+                        <div class="breathing-controls-row">
+                            <button id="btn-breath-start" class="btn btn-primary btn-block">
+                                <span class="material-icons-round btn-icon" id="btn-breath-start-icon">play_arrow</span>
+                                <span id="btn-breath-start-label">Start Pacer</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Visual Breathing Circle -->
+                    <div class="breathing-visual-container glass card">
+                        <div class="pacer-prompt" id="pacer-prompt-display">Get Ready</div>
+                        
+                        <div class="breathing-sphere-outer">
+                            <div class="breathing-sphere-glow" id="breathing-sphere-glow-el"></div>
+                            <div class="breathing-sphere" id="breathing-sphere-el"></div>
+                            <div class="pacer-timer" id="pacer-timer-display">0</div>
+                        </div>
+
+                        <div class="pacer-instruction" id="pacer-instruction-text">Press Start to begin guided breathing</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Analytics & History -->
+            <div id="tab-analytics" class="tab-content">
+                <div class="analytics-layout-grid">
+                    <!-- Mood Progress Chart (SVG) -->
+                    <div class="analytics-card glass card">
+                        <h3>Mood Trends Timeline</h3>
+                        <p class="panel-subtitle">A visual summary of your emotional trajectory over the exam prep season.</p>
+                        
+                        <div class="chart-container" id="mood-chart-wrapper">
+                            <!-- SVG mood tracker line chart populated dynamically by app.js -->
+                            <svg id="mood-svg-chart" width="100%" height="240" viewBox="0 0 600 240" preserveAspectRatio="none">
+                                <g id="chart-grid-lines"></g>
+                                <g id="chart-axes"></g>
+                                <path id="chart-line-path" fill="none" stroke="var(--primary-color)" stroke-width="3" stroke-linecap="round"></path>
+                                <g id="chart-dots"></g>
+                                <g id="chart-labels"></g>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Stress Triggers Chart -->
+                    <div class="analytics-card glass card">
+                        <h3>Stress Trigger Breakdown</h3>
+                        <p class="panel-subtitle">Identifies the recurring issues causing you stress during exam preparation.</p>
+                        <div id="trigger-list-wrapper" class="trigger-freq-list">
+                            <!-- Populated dynamically by app.js (lists mock test scores, sleep deprivation frequencies) -->
+                        </div>
+                    </div>
+
+                    <!-- Journal reflections timeline -->
+                    <div class="analytics-card glass card" style="grid-column: 1 / -1;">
+                        <h3>Journal History & Thoughts Diary</h3>
+                        <div class="reflections-timeline" id="reflections-history-container">
+                            <div class="no-data-msg">No check-ins logged yet. Complete your first wellness check-in to start your history!</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab: Relax Desk -->
+            <div id="tab-resources" class="tab-content">
+                <div class="resources-layout-grid">
+                    <!-- Lo-fi Calming Ambience -->
+                    <div class="resource-card glass card">
+                        <div class="resource-header">
+                            <span class="material-icons-round resource-icon accent-teal">headphones</span>
+                            <h3>Zen Soundscapes</h3>
+                        </div>
+                        <p class="resource-desc">Calming ambient sound streams to block out noise and promote focus during intensive study sessions.</p>
+                        <div class="audio-stream-list">
+                            <div class="audio-stream-item">
+                                <div class="stream-info">
+                                    <span class="stream-name">Binaural Study Beats</span>
+                                    <span class="stream-desc">Alpha waves to aid memory retention</span>
+                                </div>
+                                <button class="btn btn-circle btn-sm btn-audio-play" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" aria-label="Play Binaural Study Beats">
+                                    <span class="material-icons-round">play_arrow</span>
+                                </button>
+                            </div>
+                            <div class="audio-stream-item">
+                                <div class="stream-info">
+                                    <span class="stream-name">Restorative Forest Rain</span>
+                                    <span class="stream-desc">Natural white noise to reduce stress</span>
+                                </div>
+                                <button class="btn btn-circle btn-sm btn-audio-play" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" aria-label="Play Restorative Forest Rain">
+                                    <span class="material-icons-round">play_arrow</span>
+                                </button>
+                            </div>
+                            <div class="audio-stream-item">
+                                <div class="stream-info">
+                                    <span class="stream-name">Gentle Ocean Swells</span>
+                                    <span class="stream-desc">Calming swells to assist deep sleep and relaxation</span>
+                                </div>
+                                <button class="btn btn-circle btn-sm btn-audio-play" data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" aria-label="Play Gentle Ocean Swells">
+                                    <span class="material-icons-round">play_arrow</span>
+                                </button>
+                            </div>
+                        </div>
+                        <audio id="audio-background-player" loop></audio>
+                    </div>
+
+                    <!-- Study Pacing Timer (Pomodoro) -->
+                    <div class="resource-card glass card">
+                        <div class="resource-header">
+                            <span class="material-icons-round resource-icon accent-emerald">hourglass_empty</span>
+                            <h3>Focus Pacing Timer</h3>
+                        </div>
+                        <p class="resource-desc">Use Pomodoro pacing (25m Study, 5m Rest) to avoid mental exhaustion and study burnouts.</p>
+                        
+                        <div class="pomodoro-timer-display" id="pomo-timer-display">25:00</div>
+                        <div class="pomodoro-timer-controls">
+                            <button id="btn-pomo-start" class="btn btn-secondary btn-sm">Start Focus</button>
+                            <button id="btn-pomo-reset" class="icon-btn-text" aria-label="Reset Pomodoro Timer"><span class="material-icons-round">replay</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Application Javascript -->
+    <script src="app.js"></script>
+</body>
+</html>
