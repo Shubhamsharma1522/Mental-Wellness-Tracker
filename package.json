@@ -2,12 +2,26 @@
   "name": "zenstudy-ai",
   "version": "2.0.0",
   "description": "ZenStudy AI - Student Mental Wellness Tracker for Google Prompt Wars",
+  "keywords": [
+    "mental-wellness",
+    "student-health",
+    "mood-tracker",
+    "stress-management",
+    "exam-anxiety"
+  ],
+  "license": "MIT",
+  "author": "ZenStudy AI",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shubhamsharma1522/Mental-Wellness-Tracker.git"
+  },
   "scripts": {
     "dev": "npx -y http-server -p 8080",
     "build": "echo 'Static build complete'",
     "test": "jest"
   },
   "devDependencies": {
+    "eslint": "^8.57.1",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.4.1"
   }

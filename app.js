@@ -103,7 +103,8 @@ const ZenStudy = (function () {
             isActive: false,
             durationSeconds: 25 * 60,
             secondsRemaining: 25 * 60,
-            mode: 'work' // 'work' or 'break'
+            mode: 'work', // 'work' or 'break'
+            sessionsCompleted: 0
         },
 
         audio: {
@@ -129,6 +130,7 @@ const ZenStudy = (function () {
         setupTabs();
         setupMoodSelector();
         setupCheckinForm();
+        setupHistoryActions();
         setupBreathingPacer();
         setupAudioPlayer();
         setupPomodoroTimer();
@@ -196,7 +198,10 @@ const ZenStudy = (function () {
             pomoDisplay: document.getElementById('pomo-timer-display'),
             pomoProgressRing: document.getElementById('pomo-progress-ring-el'),
             pomoStartBtn: document.getElementById('btn-pomo-start'),
-            pomoResetBtn: document.getElementById('btn-pomo-reset')
+            pomoResetBtn: document.getElementById('btn-pomo-reset'),
+            pomoSessionCount: document.getElementById('pomo-session-count'),
+            exportHistoryBtn: document.getElementById('btn-export-history'),
+            clearHistoryBtn: document.getElementById('btn-clear-history')
         };
     }
 
@@ -553,6 +558,52 @@ const ZenStudy = (function () {
             DOM.counselActionBtn.addEventListener('click', () => {
                 const breathingTabBtn = document.getElementById('tab-btn-breathing');
                 if (breathingTabBtn) switchTab(breathingTabBtn);
+            });
+        }
+    }
+
+    /**
+     * Sets up event listeners for exporting and clearing check-in history.
+     */
+    function setupHistoryActions() {
+        if (DOM.exportHistoryBtn) {
+            DOM.exportHistoryBtn.addEventListener('click', () => {
+                if (state.history.length === 0) {
+                    showToast('No history available to export.', 'warning');
+                    return;
+                }
+                try {
+                    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.history, null, 2));
+                    const downloadAnchor = document.createElement('a');
+                    downloadAnchor.setAttribute("href", dataStr);
+                    downloadAnchor.setAttribute("download", `zenstudy_history_${Date.now()}.json`);
+                    document.body.appendChild(downloadAnchor);
+                    downloadAnchor.click();
+                    downloadAnchor.remove();
+                    showToast('History exported successfully!', 'success');
+                } catch (e) {
+                    console.error('Error exporting history:', e);
+                    showToast('Failed to export history.', 'error');
+                }
+            });
+        }
+
+        if (DOM.clearHistoryBtn) {
+            DOM.clearHistoryBtn.addEventListener('click', () => {
+                if (state.history.length === 0) {
+                    showToast('No history to clear.', 'warning');
+                    return;
+                }
+                if (confirm('Are you sure you want to permanently delete all your check-in history? This action cannot be undone.')) {
+                    state.history = [];
+                    try {
+                        localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(state.history));
+                    } catch (e) {
+                        console.warn('Unable to clear history in localStorage:', e);
+                    }
+                    updateAnalyticsDisplay();
+                    showToast('Check-in history cleared successfully.', 'success');
+                }
             });
         }
     }
@@ -1287,6 +1338,10 @@ You MUST respond with a single, highly structured JSON object following this EXA
                 }
             });
         }
+
+        if (DOM.pomoSessionCount) {
+            DOM.pomoSessionCount.textContent = state.pomodoro.sessionsCompleted.toString();
+        }
     }
 
     /**
@@ -1297,6 +1352,7 @@ You MUST respond with a single, highly structured JSON object following this EXA
         state.pomodoro.timerId = null;
 
         if (state.pomodoro.mode === 'work') {
+            state.pomodoro.sessionsCompleted++;
             showToast('Pomodoro session completed! Enjoy a 5-minute mental break.', 'success');
             state.pomodoro.mode = 'break';
             state.pomodoro.secondsRemaining = 5 * 60;

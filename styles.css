@@ -1718,3 +1718,58 @@ h1, h2, h3, h4, h5, h6 {
         border: 2px solid Highlight;
     }
 }
+
+/* ==========================================================================
+   27. Utility Classes (Replacing Inline HTML Styles)
+   ========================================================================== */
+.noscript-container {
+    padding: 24px;
+    text-align: center;
+    background: hsl(218, 25%, 10%);
+    color: hsl(215, 20%, 78%);
+    font-family: var(--font-body);
+}
+
+.w-280 {
+    width: 280px;
+}
+
+.w-85-pct {
+    width: 85%;
+}
+
+.w-70-pct {
+    width: 70%;
+}
+
+.w-90-pct {
+    width: 90%;
+}
+
+.mt-12 {
+    margin-top: 12px;
+}
+
+.mt-20 {
+    margin-top: 20px;
+}
+
+.mt-8 {
+    margin-top: 8px;
+}
+
+.pomo-session-counter {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-secondary);
+    text-align: center;
+    z-index: 2;
+}
+
+.analytics-actions-row {
+    grid-column: span 2;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px;
+}
